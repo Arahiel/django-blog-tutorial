@@ -12,6 +12,7 @@ def posts(request):
         "page_title": "All posts"
     })
 
+
 def post(request, slug):
     return render(request, "blog/post.html", {
         "page_title": "Post title"
