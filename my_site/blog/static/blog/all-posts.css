@@ -20,6 +20,10 @@ body {
     margin: 3rem 0;
 }
 
+#all-posts .post {
+    max-height: 400px;
+}
+
 ul {
     list-style: none;
     margin: 0;
@@ -34,10 +38,17 @@ ul {
     height: 7rem;
 }
 
-.post a {
-    height: 22rem;
-    transform-origin: center;
+.post {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     border-radius: 12px;
     background-color: white;
+}
+
+.post a {
+    height: 22rem;
+    transform-origin: center;
+}
+
+.post .tags ul {
+    gap: 1rem;
 }
