@@ -4,10 +4,9 @@ from .models import Post
 
 
 def index(request):
-    posts_data = Post.objects.all().order_by("date")
-    latest_posts = reversed(list(posts_data)[-3:])
+    posts_data = Post.objects.all().order_by("-date")[:3]
     return render(request, "blog/index.html", {
-        "posts": latest_posts
+        "posts": posts_data
     })
 
 

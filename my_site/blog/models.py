@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.db.models.fields.related import ManyToManyField
+from django.core.validators import MinLengthValidator
 
 # Create your models here.
 
@@ -26,11 +27,9 @@ class Post(models.Model):
     excerpt = models.TextField(max_length=255)
     image_name = models.CharField(max_length=50)
     date = models.DateField(auto_now=True)
-    slug = models.SlugField(default="", null=False, db_index=True)
-    content = models.TextField(default="", max_length=1000)
-    author = models.ForeignKey(Author, null=False, related_name="posts", on_delete=models.CASCADE)
+    slug = models.SlugField(default="", null=False, unique=True)
+    content = models.TextField(validators=[MinLengthValidator(10)])
+    author = models.ForeignKey(Author, null=True, related_name="posts", on_delete=models.SET_NULL)
     tags = ManyToManyField(Tag, related_name="posts")
 
-    def __str__(self):
-        return self.title
     
