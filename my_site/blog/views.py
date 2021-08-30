@@ -4,7 +4,7 @@ from .models import Post
 
 
 def index(request):
-    posts_data = Post.objects.all().order_by("date_created")
+    posts_data = Post.objects.all().order_by("date")
     latest_posts = reversed(list(posts_data)[-3:])
     return render(request, "blog/index.html", {
         "posts": latest_posts
@@ -12,7 +12,7 @@ def index(request):
 
 
 def posts(request):
-    posts_data = Post.objects.all().order_by("-date_created")
+    posts_data = Post.objects.all().order_by("-date")
     return render(request, "blog/posts.html", {
         "posts": posts_data
     })
@@ -25,7 +25,7 @@ def post(request, slug):
 
 
 def tag(request, tag_name):
-    posts_data = Post.objects.all().order_by("-date_created").filter(tags__caption=tag_name)
+    posts_data = Post.objects.all().order_by("-date").filter(tags__caption=tag_name)
     return render(request, "blog/posts.html", {
         "posts": posts_data
     })

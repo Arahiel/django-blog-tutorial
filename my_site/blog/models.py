@@ -25,7 +25,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50)
     excerpt = models.TextField(max_length=255)
     image_name = models.CharField(max_length=50)
-    date_created = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(auto_now=True)
     slug = models.SlugField(default="", null=False, db_index=True)
     content = models.TextField(default="", max_length=1000)
     author = models.ForeignKey(Author, null=False, related_name="posts", on_delete=models.CASCADE)
@@ -34,7 +34,3 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
-    def save(self, *args, **kwargs):
-        if not self.date_created:
-            self.date_created = datetime.now()
-        super().save(*args, **kwargs)
