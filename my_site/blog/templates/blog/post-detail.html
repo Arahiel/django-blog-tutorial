@@ -4,6 +4,7 @@
 {% block title %}{{post.title}}{% endblock title %}
 {% block css_files %}
 <link rel="stylesheet" href="{% static "blog/post-detail.css" %}" type="text/css">
+<link rel="stylesheet" href="{% static "blog/form.css" %}" type="text/css">
 {% endblock css_files %}
 
 {% block content %}
@@ -22,4 +23,25 @@
 <main>
     {{post.content|linebreaks}}
 </main>
+<section id="comments">
+    <div class="form-control">
+        <form action="{% url "add-comment" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="post-slug" value="{{post.slug}}" />
+            {{form}}
+            <button>Submit</button>
+        </form>
+    </div>
+    <h1>Comments:</h1>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <div class="comment">
+                <h2>{{comment.first_name}} {{comment.last_name}}</h2>
+                <p>{{comment.text}}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
 {% endblock content %}

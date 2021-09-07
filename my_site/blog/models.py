@@ -31,5 +31,15 @@ class Post(models.Model):
     content = models.TextField(validators=[MinLengthValidator(10)])
     author = models.ForeignKey(Author, null=True, related_name="posts", on_delete=models.SET_NULL)
     tags = ManyToManyField(Tag, related_name="posts")
-
     
+    def __str__(self):
+        return self.title
+
+class Comment(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    text = models.TextField(max_length=255)
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.text

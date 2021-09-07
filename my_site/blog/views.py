@@ -1,8 +1,9 @@
+from .forms import CommentForm
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.base import View
-from .models import Post
+from .models import Post, Comment
 from django.views.generic import DetailView, ListView
 # Create your views here.
 
@@ -38,6 +39,28 @@ class RemoveReadLaterView(View):
         return HttpResponseRedirect(reverse("post-detail-page", args=(slug,)))
 
 
+class PostView(View):
+    def get(self, slug, request):
+        session = request.session
+        return render(request, "blog/post-detail.html", {
+            "to_be_read": bool(session.get(f"read_later_slugs.{slug}")),
+            "comments": Comment.objects.filter(post__slug=slug),
+            "form": CommentForm()
+        })
+
+
+class AddCommentView(View):
+    def post(self, request):
+        form = CommentForm(request.POST)
+        slug = request.POST.get("post-slug")
+
+        if form.is_valid():
+            post = Post.objects.get(slug=slug)
+            new_comment = Comment(**form.cleaned_data, post=post)
+            new_comment.save()
+        return HttpResponseRedirect(reverse("post-detail-page", args=(slug,)))
+
+
 class PostView(DetailView):
     template_name = "blog/post-detail.html"
     model = Post
@@ -48,6 +71,8 @@ class PostView(DetailView):
         post = self.object
         context["to_be_read"] = bool(
             session.get(f"read_later_slugs.{post.slug}"))
+        context["comments"] = Comment.objects.filter(post__slug=post.slug)
+        context["form"] = CommentForm()
         return context
 
 
