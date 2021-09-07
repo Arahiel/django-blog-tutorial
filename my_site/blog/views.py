@@ -12,10 +12,10 @@ class IndexView(ListView):
     model = Post
     template_name = "blog/index.html"
     context_object_name = "posts"
+    ordering = "-date"
 
     def get_queryset(self):
-        query = super().get_queryset()
-        return query.order_by("-date")[:3]
+        return super().get_queryset()[:3]
 
 
 class PostsView(ListView):
@@ -40,40 +40,32 @@ class RemoveReadLaterView(View):
 
 
 class PostView(View):
-    def get(self, slug, request):
+    def get(self, request, slug):
+        post = Post.objects.get(slug=slug)
         session = request.session
         return render(request, "blog/post-detail.html", {
-            "to_be_read": bool(session.get(f"read_later_slugs.{slug}")),
-            "comments": Comment.objects.filter(post__slug=slug),
-            "form": CommentForm()
+            "post": post,
+            "form": CommentForm(),
+            "to_be_read": bool(session.get(f"read_later_slugs.{post.slug}")),
+            "comments": Comment.objects.filter(post__slug=post.slug)
         })
 
-
-class AddCommentView(View):
-    def post(self, request):
+    def post(self, request, slug):
         form = CommentForm(request.POST)
-        slug = request.POST.get("post-slug")
+        post = Post.objects.get(slug=slug)
 
         if form.is_valid():
-            post = Post.objects.get(slug=slug)
-            new_comment = Comment(**form.cleaned_data, post=post)
+            new_comment = form.save(commit=False)
+            new_comment.post = post
             new_comment.save()
-        return HttpResponseRedirect(reverse("post-detail-page", args=(slug,)))
+            return HttpResponseRedirect(reverse("post-detail-page", args=[slug]))
 
-
-class PostView(DetailView):
-    template_name = "blog/post-detail.html"
-    model = Post
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        session = self.request.session
-        post = self.object
-        context["to_be_read"] = bool(
-            session.get(f"read_later_slugs.{post.slug}"))
-        context["comments"] = Comment.objects.filter(post__slug=post.slug)
-        context["form"] = CommentForm()
-        return context
+        return render(request, "blog/post-detail.html", {
+            "post": post,
+            "form": form,
+            "to_be_read": bool(request.session.get(f"read_later_slugs.{post.slug}")),
+            "comments": Comment.objects.filter(post__slug=post.slug)
+        })
 
 
 class TagView(ListView):
