@@ -1,0 +1,13 @@
+<form action="
+{% if to_be_read %}
+{% url "remove-read-later" %}
+{% else %}
+{% url "add-read-later" %}
+{% endif %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="read_later_slug" , value={{post.slug}}>
+    <button>{% if to_be_read %}Remove {% endif %}Read Later</button>
+    {% if to_be_read %}
+    <p>Marked as read later!</p>
+    {% endif %}
+</form>
