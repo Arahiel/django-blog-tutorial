@@ -6,7 +6,7 @@
 {% endif %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="read_later_slug" , value={{post.slug}}>
-    <button>{% if to_be_read %}Remove {% endif %}Read Later</button>
+    <button id="read-later">{% if to_be_read %}Remove {% endif %}Read Later</button>
     {% if to_be_read %}
     <p>Marked as read later!</p>
     {% endif %}

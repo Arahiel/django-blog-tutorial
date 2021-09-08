@@ -47,7 +47,7 @@ class PostView(View):
             "post": post,
             "form": CommentForm(),
             "to_be_read": bool(session.get(f"read_later_slugs.{post.slug}")),
-            "comments": Comment.objects.filter(post__slug=post.slug)
+            "comments": post.comments.order_by("-id").all()
         })
 
     def post(self, request, slug):
@@ -64,7 +64,7 @@ class PostView(View):
             "post": post,
             "form": form,
             "to_be_read": bool(request.session.get(f"read_later_slugs.{post.slug}")),
-            "comments": Comment.objects.filter(post__slug=post.slug)
+            "comments": post.comments.order_by("-id").all()
         })
 
 
