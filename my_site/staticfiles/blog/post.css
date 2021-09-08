@@ -1,0 +1,87 @@
+.post {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.post a {
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+}
+
+.post:hover,
+.post:active {
+    transform: scale(1.1);
+    background-color: #390281;
+    color: white;
+}
+
+.post:hover a,
+.post:active a {
+    color:inherit;
+}
+
+.post:hover ul li,
+.post:active ul li {
+    background-color: white;
+}
+
+.post:hover ul li a,
+.post:active ul li a {
+    color: #390281;
+}
+
+.post img {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.post h3 {
+    margin: 0.25rem 0;
+}
+
+.post time {
+    color: #666666;
+    margin: 0.25rem;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.post:hover time,
+.post:active time {
+    color: white;
+}
+
+.post .tags ul {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 1rem !important;
+}
+
+.post .tags li {
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    text-align: center;
+    background-color: #390281;
+    color: white;
+    font-weight: bold;
+    border-radius: 10%;
+    padding: 0.2rem;
+}
+
+.post .tags li a {
+    color: white;
+    margin: 0 0.5rem;
+    padding: 0;
+}
+
+.post .tags li a:hover {
+    color: #4A8102;
+}
